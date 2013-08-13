@@ -1,0 +1,11 @@
+.DS_Store
+*.o
+build/
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata
+*.xcworkspace/xcuserdata/*
+/Localization
+/automation_results/*
+!/automation_results/.gitkeep
+mimic.pid
