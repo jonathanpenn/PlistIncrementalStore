@@ -83,7 +83,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
                                          withContext:(NSManagedObjectContext *)context
                                                error:(NSError **)error {
 
-    PlistStoreFileItem *item = [self newItemForObjectID:objectID];
+    PlistStoreFileItem *item = [self _newItemForObjectID:objectID];
     if (![item loadContent:error]) return nil;
     NSDictionary *values = [self.entityCoder decodeData:item.content forEntity:objectID.entity error:error];
     if (!values) return nil;
@@ -135,7 +135,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
     // Yes, we're iterating over ALL the files in the directory, but we have to every time. We have to load every file to get it's contents to know how to filter and sort the results before handing the results back. Very inefficient for a large number of files as it is.
     BOOL success = [self.storeFileWatcher enumerateFileItems:^(PlistStoreFileItem *item, BOOL *stop) {
         NSError *error = nil;
-        NSManagedObjectID *objectID = [self newObjectIDFromStorageItem:item error:&error];
+        NSManagedObjectID *objectID = [self _newObjectIDFromStorageItem:item error:&error];
 
         if (!objectID) {
             if (_debugLog) {
@@ -193,7 +193,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
         NSData *encoded = [self.entityCoder encodeObject:object forEntity:object.entity error:error];
         if (!encoded) return NO;
 
-        PlistStoreFileItem *item = [self newItemForObjectID:object.objectID];
+        PlistStoreFileItem *item = [self _newItemForObjectID:object.objectID];
         item.content = encoded;
         if (![item writeContent:error]) return NO;
     }
@@ -207,7 +207,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
     if (objects == nil) return YES;
 
     for (NSManagedObject *object in objects) {
-        PlistStoreFileItem *item = [self newItemForObjectID:object.objectID];
+        PlistStoreFileItem *item = [self _newItemForObjectID:object.objectID];
         if (![item removeFile:error]) return NO;
     }
     return YES;
@@ -219,7 +219,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
 - (void)plistStoreFileWatcher:(PlistStoreFileWatcher *)storage didSeeChangedStorageItem:(PlistStoreFileItem *)item {
 
     NSError *error = nil;
-    NSManagedObjectID *objectID = [self newObjectIDFromStorageItem:item error:&error];
+    NSManagedObjectID *objectID = [self _newObjectIDFromStorageItem:item error:&error];
 
     if (!objectID) {
         if (_debugLog) {
@@ -255,7 +255,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
 - (void)plistStoreFileWatcher:(PlistStoreFileWatcher *)storage didSeeRemovedStorageItem:(PlistStoreFileItem *)item {
 
     NSError *error = nil;
-    NSManagedObjectID *objectID = [self newObjectIDFromStorageItem:item error:&error];
+    NSManagedObjectID *objectID = [self _newObjectIDFromStorageItem:item error:&error];
 
     if (!objectID) {
         if (_debugLog) {
@@ -276,7 +276,7 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
 
 #pragma mark - NSManagedObjectID/PlistStoreFileItem Conversions
 
-- (PlistStoreFileItem *)newItemForObjectID:(NSManagedObjectID *)objectID {
+- (PlistStoreFileItem *)_newItemForObjectID:(NSManagedObjectID *)objectID {
     // referenceObjectForObjectID: is a method on NSIncrementalStore superclass.
     // Core Data manages the conversion to/from reference objects.
     NSString *referenceObject = [[self referenceObjectForObjectID:objectID] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -285,8 +285,8 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
                                      inStoreFileWatcher:self.storeFileWatcher];
 }
 
-- (NSManagedObjectID *)newObjectIDFromStorageItem:(PlistStoreFileItem *)item
-                                            error:(NSError **)error {
+- (NSManagedObjectID *)_newObjectIDFromStorageItem:(PlistStoreFileItem *)item
+                                             error:(NSError **)error {
 
     NSArray *parts = [item.storageIdentifier componentsSeparatedByString:@";"];
     if ([parts count] != 2) {
