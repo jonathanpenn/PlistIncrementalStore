@@ -239,8 +239,10 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
         NSError *error = nil;
         NSManagedObject *object = [self.contextToNotify existingObjectWithID:objectID error:&error];
 
-        if (!object && _debugLog) {
-            NSLog(@"Unable to load object for item at \"%@\". It's possible that the file was written as empty before writing the contents as a separate step. (%@)", item.URL.path, error.localizedDescription);
+        if (!object) {
+            if(_debugLog) {
+                NSLog(@"Unable to load object for item at \"%@\". It's possible that the file was written as empty before writing the contents as a separate step. (%@)", item.URL.path, error.localizedDescription);
+            }
             return;
         }
 
