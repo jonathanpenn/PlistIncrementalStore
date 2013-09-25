@@ -136,7 +136,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{ _workerCount++; });
 
             NSString *uuid = [[NSProcessInfo processInfo] globallyUniqueString];
-            NSString *date = [NSDate dateWithTimeIntervalSinceNow:0-arc4random_uniform(800000)/1000.f];
+            NSDate *date = [NSDate dateWithTimeIntervalSinceNow:0-arc4random_uniform(800000)/1000.f];
             NSDictionary *data = @{@"timestamp": date, @"content": uuid};
             NSData *encoded = [coder encodeObject:data forEntity:[NSEntityDescription entityForName:@"JournalEntry" inManagedObjectContext:self.coreData.context] error:nil];
             NSString *identifier = [NSString stringWithFormat:@"JournalEntry;%@", uuid];
@@ -383,13 +383,11 @@
 - (void)setUpToolbarControls {
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
-    self.sortControl = [[UISegmentedControl alloc] initWithItems:@[@"   ▲   ", @"   ▼   "]];
-    self.sortControl.segmentedControlStyle = UISegmentedControlStyleBar;
+    self.sortControl = [[UISegmentedControl alloc] initWithItems:@[@" ▲   ", @" ▼   "]];
     self.sortControl.selectedSegmentIndex = 1;
     [self.sortControl addTarget:self action:@selector(criteriaDidChanged) forControlEvents:UIControlEventAllEvents];
 
     self.predicateControl = [[UISegmentedControl alloc] initWithItems:@[@"All", @"Starts With 'a'"]];
-    self.predicateControl.segmentedControlStyle = UISegmentedControlStyleBar;
     self.predicateControl.selectedSegmentIndex = 0;
     [self.predicateControl addTarget:self action:@selector(criteriaDidChanged) forControlEvents:UIControlEventAllEvents];
 
