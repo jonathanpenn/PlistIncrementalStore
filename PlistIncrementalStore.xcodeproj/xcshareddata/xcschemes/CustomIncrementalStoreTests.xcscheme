@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "ABE2E30816BE25AB000FF35A"
-               BuildableName = "PlistIncrementalStoreTests.octest"
+               BuildableName = "PlistIncrementalStoreTests.xctest"
                BlueprintName = "PlistIncrementalStoreTests"
                ReferencedContainer = "container:PlistIncrementalStore.xcodeproj">
             </BuildableReference>
@@ -47,7 +47,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "ABE2E30816BE25AB000FF35A"
-               BuildableName = "PlistIncrementalStoreTests.octest"
+               BuildableName = "PlistIncrementalStoreTests.xctest"
                BlueprintName = "PlistIncrementalStoreTests"
                ReferencedContainer = "container:PlistIncrementalStore.xcodeproj">
             </BuildableReference>
