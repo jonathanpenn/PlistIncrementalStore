@@ -18,32 +18,32 @@
 
 - (void)testStartsOutEmpty {
     NSArray *contents = [self.coreData dumpContents];
-    STAssertEquals((int)[contents count], 0, @"Expecting empty contents at start");
+    XCTAssertEqual((int)[contents count], 0, @"Expecting empty contents at start");
 }
 
 - (void)testAddingAFileShowsUpInList {
     [self generateJournalEntryFileWithContent:@"Hello world"];
     NSArray *entries = [self.coreData dumpContents];
-    STAssertEquals((int)[entries count], 1, @"Expecting one file");
+    XCTAssertEqual((int)[entries count], 1, @"Expecting one file");
     NSString *content = [entries[0] content];
     NSRange foundRange = [content rangeOfString:@"Hello world"];
 
-    STAssertTrue(foundRange.location != NSNotFound, @"Could not find Hello world in %@", content);
+    XCTAssertTrue(foundRange.location != NSNotFound, @"Could not find Hello world in %@", content);
 }
 
 - (void)testUpdatingAFileAndRefreshingObjectSeesChanges {
     NSURL *entryURL = [self generateJournalEntryFileWithContent:@"Hello world"];
     JournalEntry *entry = [self.coreData dumpContents][0];
 
-    STAssertEqualObjects(entry.content, @"Hello world", @"Expected starting content: %@", entry.content);
+    XCTAssertEqualObjects(entry.content, @"Hello world", @"Expected starting content: %@", entry.content);
 
     [self updateContent:@"Another" atURL:entryURL];
 
-    STAssertEqualObjects(entry.content, @"Hello world", @"Before refresh, expected same content: %@", entry.content);
+    XCTAssertEqualObjects(entry.content, @"Hello world", @"Before refresh, expected same content: %@", entry.content);
     
     [self.coreData.context refreshObject:entry mergeChanges:YES];
 
-    STAssertEqualObjects(entry.content, @"Another", @"Expected reloaded content: %@", entry.content);
+    XCTAssertEqualObjects(entry.content, @"Another", @"Expected reloaded content: %@", entry.content);
 }
 
 - (void)testUpdatingAFileAndThenTryingToWriteADirtyEntry {
@@ -51,16 +51,16 @@
     NSURL *entryURL = [self generateJournalEntryFileWithContent:@"Hello world"];
     JournalEntry *entry = [self.coreData dumpContents][0];
 
-    STAssertEqualObjects(entry.content, @"Hello world", @"Expected starting content: %@", entry.content);
+    XCTAssertEqualObjects(entry.content, @"Hello world", @"Expected starting content: %@", entry.content);
 
     [self updateContent:@"Another" atURL:entryURL];
 
     entry.content = @"Smush";
-    STAssertTrue([self.coreData save:&error], @"Could not save document %@", error);
+    XCTAssertTrue([self.coreData save:&error], @"Could not save document %@", error);
 
     [self.coreData.context refreshObject:entry mergeChanges:YES];
 
-    STAssertEqualObjects(entry.content, @"Smush", @"Expected original file content content: %@", entry.content);
+    XCTAssertEqualObjects(entry.content, @"Smush", @"Expected original file content content: %@", entry.content);
 }
 
 - (void)testAddingAFileNotfiesObserver {
@@ -78,12 +78,12 @@
 
     PAUSE(3);
 
-    STAssertEquals(notificationCount, 2, @"Supposed to notify twice: %d", notificationCount);
+    XCTAssertEqual(notificationCount, 2, @"Supposed to notify twice: %d", notificationCount);
 
     NSArray *entries = [self.coreData dumpContents];
 
-    STAssertEqualObjects(((JournalEntry *)entries[0]).content, @"Ping another!", nil);
-    STAssertEqualObjects(((JournalEntry *)entries[1]).content, @"Ping me!", nil);
+    XCTAssertEqualObjects(((JournalEntry *)entries[0]).content, @"Ping another!");
+    XCTAssertEqualObjects(((JournalEntry *)entries[1]).content, @"Ping me!");
 
     [[NSNotificationCenter defaultCenter] removeObserver:observer];
 }

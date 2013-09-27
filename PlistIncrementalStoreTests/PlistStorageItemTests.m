@@ -1,8 +1,8 @@
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "PlistStoreFileItem.h"
 #import "PlistStoreFileWatcher.h"
 
-@interface PlistStorageItemTests : SenTestCase
+@interface PlistStorageItemTests : XCTestCase
 @property (nonatomic, copy) NSURL *rootURL, *fileURL;
 @end
 
@@ -18,16 +18,16 @@
 - (void)testSetsURLAndStorageIdentifierFromURL {
     PlistStoreFileItem *item = [PlistStoreFileItem itemForURL:self.fileURL withStoreFileWatcher:nil];
 
-    STAssertEqualObjects(self.fileURL, item.URL, nil);
-    STAssertEqualObjects(@"storageidentifier", item.storageIdentifier, nil);
+    XCTAssertEqualObjects(self.fileURL, item.URL);
+    XCTAssertEqualObjects(@"storageidentifier", item.storageIdentifier);
 }
 
 - (void)testSetsURLAndStorageIdentifierFromStorageIdentifier {
     PlistStoreFileWatcher *watcher = [[PlistStoreFileWatcher alloc] initWithURL:self.rootURL];
     PlistStoreFileItem *item = [PlistStoreFileItem itemForStorageIdentifier:@"storageidentifier" inStoreFileWatcher:watcher];
 
-    STAssertEqualObjects(self.fileURL, item.URL, nil);
-    STAssertEqualObjects(@"storageidentifier", item.storageIdentifier, nil);
+    XCTAssertEqualObjects(self.fileURL, item.URL);
+    XCTAssertEqualObjects(@"storageidentifier", item.storageIdentifier);
 }
 
 - (void)testWritingAndLoadingFromDisk {
@@ -37,15 +37,15 @@
     char str[] = "data";
     item.content = [NSData dataWithBytes:str length:strlen(str)];
 
-    STAssertTrue([item writeContent:&error], @"%@\n%@", error.localizedDescription, error);
+    XCTAssertTrue([item writeContent:&error], @"%@\n%@", error.localizedDescription, error);
 
     item = [PlistStoreFileItem itemForURL:self.fileURL withStoreFileWatcher:nil];
 
-    STAssertFalse(item.contentIsLoaded, nil);
-    STAssertTrue([item loadContent:&error], @"%@\n%@", error.localizedDescription, error);
-    STAssertTrue(item.contentIsLoaded, nil);
+    XCTAssertFalse(item.contentIsLoaded);
+    XCTAssertTrue([item loadContent:&error], @"%@\n%@", error.localizedDescription, error);
+    XCTAssertTrue(item.contentIsLoaded);
 
-    STAssertEqualObjects([NSData dataWithBytes:str length:strlen(str)], item.content, nil);
+    XCTAssertEqualObjects([NSData dataWithBytes:str length:strlen(str)], item.content);
 }
 
 

@@ -1,11 +1,11 @@
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "CoreDataStack.h"
 #import "PlistIncrementalStore.h"
 #import "JournalEntry.h"
 
 #define PAUSE(seconds) [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:(seconds)]]
 
-@interface ApplicationDataTestCase : SenTestCase
+@interface ApplicationDataTestCase : XCTestCase
 
 @property (nonatomic, copy) NSURL *tempURL;
 @property (nonatomic, strong) CoreDataStack *coreData;

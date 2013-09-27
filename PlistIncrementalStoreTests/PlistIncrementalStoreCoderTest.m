@@ -1,8 +1,8 @@
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "PlistIncrementalStoreCoder.h"
 #import "PlistIncrementalStoreErrors.h"
 
-@interface PlistIncrementalStoreCoderTest : SenTestCase
+@interface PlistIncrementalStoreCoderTest : XCTestCase
 @property (nonatomic, strong) NSManagedObjectModel *model;
 @property (nonatomic, strong) NSPersistentStoreCoordinator *coordinator;
 @property (nonatomic, strong) NSManagedObjectContext *context;
@@ -88,7 +88,7 @@
 {
     NSError *error = nil;
     NSDictionary *rawEncoded = [NSPropertyListSerialization propertyListWithData:data options:0 format:nil error:&error];
-    STAssertNotNil(rawEncoded, @"Error deserializing raw dictionary %@\n%@", error.localizedDescription, error);
+    XCTAssertNotNil(rawEncoded, @"Error deserializing raw dictionary %@\n%@", error.localizedDescription, error);
     return rawEncoded;
 }
 
@@ -96,7 +96,7 @@
 {
     NSError *error = nil;
     NSData *rawEncoded = [NSPropertyListSerialization dataWithPropertyList:dict format:NSPropertyListXMLFormat_v1_0 options:0 error:&error];
-    STAssertNotNil(rawEncoded, @"Error serializing raw dictionary %@\n%@", error.localizedDescription, error);
+    XCTAssertNotNil(rawEncoded, @"Error serializing raw dictionary %@\n%@", error.localizedDescription, error);
     return rawEncoded;
 }
 
@@ -110,40 +110,40 @@
     object.transientString = @"will be nil";
 
     NSData *data = [self.entityCoder encodeObject:object forEntity:self.entityDescription error:&error];
-    STAssertNotNil(data, @"Expected data but got error %@\n%@", error.localizedDescription, error);
+    XCTAssertNotNil(data, @"Expected data but got error %@\n%@", error.localizedDescription, error);
 
     // Testing the raw encoded dictionary format
 
     NSDictionary *rawEncoded = [self rawEncodedDataToDictionary:data];
-    STAssertEqualObjects((@[@"date", @"doubleNumber", @"integerNumber", @"name"]), [rawEncoded.allKeys sortedArrayUsingSelector:@selector(compare:)], nil);
-    STAssertEqualObjects(@"Object 1", rawEncoded[@"name"], nil);
-    STAssertEqualObjects([NSDate dateWithTimeIntervalSince1970:0], rawEncoded[@"date"], nil);
-    STAssertEqualObjects(@2, rawEncoded[@"integerNumber"], nil);
-    STAssertEqualObjects(@2.2, rawEncoded[@"doubleNumber"], nil);
+    XCTAssertEqualObjects((@[@"date", @"doubleNumber", @"integerNumber", @"name"]), [rawEncoded.allKeys sortedArrayUsingSelector:@selector(compare:)]);
+    XCTAssertEqualObjects(@"Object 1", rawEncoded[@"name"]);
+    XCTAssertEqualObjects([NSDate dateWithTimeIntervalSince1970:0], rawEncoded[@"date"]);
+    XCTAssertEqualObjects(@2, rawEncoded[@"integerNumber"]);
+    XCTAssertEqualObjects(@2.2, rawEncoded[@"doubleNumber"]);
 
 
     // Testing the decoding into the incremental store node that Core Data consumes
 
     NSDictionary *values = [self.entityCoder decodeData:data forEntity:self.entityDescription error:&error];
-    STAssertNotNil(values, @"Expected dictionary but got error %@\n%@", error.localizedDescription, error);
+    XCTAssertNotNil(values, @"Expected dictionary but got error %@\n%@", error.localizedDescription, error);
 
-    STAssertEqualObjects(@"Object 1", values[@"name"], nil);
-    STAssertEqualObjects([NSDate dateWithTimeIntervalSince1970:0], values[@"date"], nil);
-    STAssertEqualObjects(@2, values[@"integerNumber"], nil);
-    STAssertEqualObjects(@2.2, values[@"doubleNumber"], nil);
-    STAssertNil(values[@"transientString"], nil);
-    STAssertNil(values[@"emptyString"], nil);
+    XCTAssertEqualObjects(@"Object 1", values[@"name"]);
+    XCTAssertEqualObjects([NSDate dateWithTimeIntervalSince1970:0], values[@"date"]);
+    XCTAssertEqualObjects(@2, values[@"integerNumber"]);
+    XCTAssertEqualObjects(@2.2, values[@"doubleNumber"]);
+    XCTAssertNil(values[@"transientString"]);
+    XCTAssertNil(values[@"emptyString"]);
 }
 
 - (void)testIgnoresExtraPlistKeys {
     NSError *error = nil;
 
-    NSData *rawEncoded = [self dictionaryToRawEncodedData:@{@"name": @"my name", @"unknwon": @"will be gone"}];
+    NSData *rawEncoded = [self dictionaryToRawEncodedData:@{@"name": @"my name", @"unknown": @"will be gone"}];
 
     NSDictionary *values = [self.entityCoder decodeData:rawEncoded forEntity:self.entityDescription error:&error];
-    STAssertNotNil(values, @"Expected dictionary but got error %@\n%@", error.localizedDescription, error);
+    XCTAssertNotNil(values, @"Expected dictionary but got error %@\n%@", error.localizedDescription, error);
 
-    STAssertEqualObjects(@"my name", values[@"name"], nil);
+    XCTAssertEqualObjects(@"my name", values[@"name"]);
 }
 
 - (void)testHandlingWrongValueType {
@@ -152,11 +152,11 @@
     NSData *rawEncoded = [self dictionaryToRawEncodedData:@{@"name": @2}];
 
     NSDictionary *values = [self.entityCoder decodeData:rawEncoded forEntity:self.entityDescription error:&error];
-    STAssertNil(values, @"Expected decoding to fail");
+    XCTAssertNil(values, @"Expected decoding to fail");
 
-    STAssertNotNil(error, @"Expecting an error object");
-    STAssertEqualObjects(@"PlistIncrementalStore", error.domain, nil);
-    STAssertEquals(PlistIncrementalStoreWrongEncodedTypeError, error.code, nil);
+    XCTAssertNotNil(error, @"Expecting an error object");
+    XCTAssertEqualObjects(@"PlistIncrementalStore", error.domain);
+    XCTAssertEqual(PlistIncrementalStoreWrongEncodedTypeError, error.code);
 }
 
 @end

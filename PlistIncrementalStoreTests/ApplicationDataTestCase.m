@@ -43,9 +43,9 @@
     PlistIncrementalStoreCoder *coder = [[PlistIncrementalStoreCoder alloc] init];
     NSData *data = [coder encodeObject:dict forEntity:[NSEntityDescription entityForName:@"JournalEntry" inManagedObjectContext:self.coreData.context] error:nil];
 
-    STAssertNotNil(data, @"Unable to reserialize plist file, %@, %@, %@", fileURL, error, error.userInfo);
+    XCTAssertNotNil(data, @"Unable to reserialize plist file, %@, %@, %@", fileURL, error, error.userInfo);
 
-    STAssertTrue([data writeToURL:fileURL options:NSDataWritingAtomic error:nil],
+    XCTAssertTrue([data writeToURL:fileURL options:NSDataWritingAtomic error:nil],
                  @"Could not generate journal entry to %@: %@, %@", fileURL, error, error.userInfo);
 }
 

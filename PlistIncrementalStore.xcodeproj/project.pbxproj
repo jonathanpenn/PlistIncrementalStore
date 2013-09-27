@@ -28,7 +28,6 @@
 		ABE2E2FE16BE25AA000FF35A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ABE2E2FD16BE25AA000FF35A /* Default@2x.png */; };
 		ABE2E30016BE25AA000FF35A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ABE2E2FF16BE25AA000FF35A /* Default-568h@2x.png */; };
 		ABE2E30316BE25AA000FF35A /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ABE2E30116BE25AA000FF35A /* DataModel.xcdatamodeld */; };
-		ABE2E30B16BE25AB000FF35A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABE2E30A16BE25AB000FF35A /* SenTestingKit.framework */; };
 		ABE2E30C16BE25AB000FF35A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABE2E2E716BE25AA000FF35A /* UIKit.framework */; };
 		ABE2E30D16BE25AB000FF35A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABE2E2E916BE25AA000FF35A /* Foundation.framework */; };
 		ABE2E30E16BE25AB000FF35A /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABE2E2ED16BE25AA000FF35A /* CoreData.framework */; };
@@ -80,8 +79,7 @@
 		ABE2E2FD16BE25AA000FF35A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		ABE2E2FF16BE25AA000FF35A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		ABE2E30216BE25AA000FF35A /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		ABE2E30916BE25AB000FF35A /* PlistIncrementalStoreTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlistIncrementalStoreTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		ABE2E30A16BE25AB000FF35A /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		ABE2E30916BE25AB000FF35A /* PlistIncrementalStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlistIncrementalStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABE2E31316BE25AB000FF35A /* PlistIncrementalStoreTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PlistIncrementalStoreTests-Info.plist"; sourceTree = "<group>"; };
 		ABE2E31516BE25AB000FF35A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		ABE2E31816BE25AB000FF35A /* CustomIncrementalStoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomIncrementalStoreTests.m; sourceTree = "<group>"; };
@@ -108,7 +106,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABE2E30B16BE25AB000FF35A /* SenTestingKit.framework in Frameworks */,
 				ABE2E30C16BE25AB000FF35A /* UIKit.framework in Frameworks */,
 				ABE2E30D16BE25AB000FF35A /* Foundation.framework in Frameworks */,
 				ABE2E30E16BE25AB000FF35A /* CoreData.framework in Frameworks */,
@@ -148,7 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				ABE2E2E416BE25AA000FF35A /* PlistIncrementalStore.app */,
-				ABE2E30916BE25AB000FF35A /* PlistIncrementalStoreTests.octest */,
+				ABE2E30916BE25AB000FF35A /* PlistIncrementalStoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -160,7 +157,6 @@
 				ABE2E2E916BE25AA000FF35A /* Foundation.framework */,
 				ABE2E2EB16BE25AA000FF35A /* CoreGraphics.framework */,
 				ABE2E2ED16BE25AA000FF35A /* CoreData.framework */,
-				ABE2E30A16BE25AB000FF35A /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -256,8 +252,8 @@
 			);
 			name = PlistIncrementalStoreTests;
 			productName = IncrementalStoreTestTests;
-			productReference = ABE2E30916BE25AB000FF35A /* PlistIncrementalStoreTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = ABE2E30916BE25AB000FF35A /* PlistIncrementalStoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -480,7 +476,6 @@
 				INFOPLIST_FILE = "PlistIncrementalStoreTests/PlistIncrementalStoreTests-Info.plist";
 				PRODUCT_NAME = PlistIncrementalStoreTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -497,7 +492,6 @@
 				INFOPLIST_FILE = "PlistIncrementalStoreTests/PlistIncrementalStoreTests-Info.plist";
 				PRODUCT_NAME = PlistIncrementalStoreTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
