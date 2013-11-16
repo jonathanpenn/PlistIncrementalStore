@@ -31,6 +31,40 @@
     XCTAssertTrue(foundRange.location != NSNotFound, @"Could not find Hello world in %@", content);
 }
 
+- (void)testCountResultType {
+    // generate a few journal entries
+    [self generateJournalEntryFileWithContent:@"Entry 1"];
+    [self generateJournalEntryFileWithContent:@"Entry 2"];
+    [self generateJournalEntryFileWithContent:@"Entry 3"];
+    [self generateJournalEntryFileWithContent:@"Entry 4"];
+    // execute a fetch request to count them
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"JournalEntry"];
+    fetchRequest.resultType = NSCountResultType;
+    NSError *error;
+    NSArray *countArray = [self.coreData.context executeFetchRequest:fetchRequest error:&error];
+    XCTAssertNotNil(countArray, @"Could not retrieve count: %@", error);
+    NSNumber *count = [countArray firstObject];
+    XCTAssertEqualObjects(count, @4, @"Count should be 4");
+}
+
+- (void)testCountWithPredicate {
+    // generate a few journal entries
+    [self generateJournalEntryFileWithContent:@"An Entry 1"];
+    [self generateJournalEntryFileWithContent:@"Not an Entry 2"];
+    [self generateJournalEntryFileWithContent:@"An Entry 3"];
+    [self generateJournalEntryFileWithContent:@"Another Entry 4"];
+    // execute a fetch request to count them
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"JournalEntry"];
+    fetchRequest.resultType = NSCountResultType;
+    // add a predicate to match things starting with 'a'
+    fetchRequest.predicate = [NSPredicate predicateWithFormat:@"content beginswith[c] 'a'"];
+    NSError *error;
+    NSArray *countArray = [self.coreData.context executeFetchRequest:fetchRequest error:&error];
+    XCTAssertNotNil(countArray, @"Could not retrieve count: %@", error);
+    NSNumber *count = [countArray firstObject];
+    XCTAssertEqualObjects(count, @3, @"Count should be 3");
+}
+
 - (void)testUpdatingAFileAndRefreshingObjectSeesChanges {
     NSURL *entryURL = [self generateJournalEntryFileWithContent:@"Hello world"];
     JournalEntry *entry = [self.coreData dumpContents][0];

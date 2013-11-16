@@ -119,7 +119,8 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
                      error:(NSError **)error {
 
     if (request.resultType != NSManagedObjectResultType &&
-        request.resultType != NSManagedObjectIDResultType) {
+        request.resultType != NSManagedObjectIDResultType &&
+        request.resultType != NSCountResultType) {
 
         if (error != NULL) {
             NSString *message = [NSString stringWithFormat:@"Unsupported result type for request %@", request];
@@ -161,10 +162,23 @@ NSString * const PlistIncrementalStoreConfigureDebugEnabled = @"PlistIncremental
 
     [results sortUsingDescriptors:request.sortDescriptors];
 
-    if (request.resultType == NSManagedObjectIDResultType) {
-        return [results valueForKeyPath:@"objectID"];
-    } else {
-        return results;
+    switch (request.resultType) {
+        case NSManagedObjectResultType:
+            return results;
+            break;
+        case NSManagedObjectIDResultType:
+            return [results valueForKeyPath:@"objectID"];
+        case NSCountResultType:
+            return @[@(results.count)];
+        default: // this should never happen
+            if (error != NULL) {
+                NSString *message = [NSString stringWithFormat:@"Unsupported result type for request %@", request];
+                *error = [NSError errorWithDomain:@"PlistIncrementalStore"
+                                             code:PlistIncrementalStoreUnsupportedResultType
+                                         userInfo:@{NSLocalizedDescriptionKey: message}];
+            }
+            return nil;
+            break;
     }
 }
 
